@@ -20,7 +20,7 @@ public class CustomerDao {
         }
     }
 
-    public List<Customer> getCustomers() throws InterruptedException {
+    public List<Customer> getCustomers()  {
         return IntStream.rangeClosed(1, 20)
                 .peek(CustomerDao::sleepExecution)
                 .peek(i -> System.out.println("processing count "+i))
@@ -28,7 +28,13 @@ public class CustomerDao {
                 .collect(Collectors.toList());
     }
 
-    public Flux<Customer> getCustomersStream() throws InterruptedException {
+    public Flux<Customer> getCustomerList()  {
+        return Flux.range(1,50)
+                .doOnNext(i -> System.out.println("processing count in stream flow : " + i))
+                .map(i -> new Customer(i, "customer" + i));
+    }
+
+    public Flux<Customer> getCustomersStream() {
         return Flux.range(1, 10)
                 .delayElements(Duration.ofSeconds(1))
                 .doOnNext(i -> System.out.println("processing count in stream flow "+i))
